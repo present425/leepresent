@@ -10,14 +10,14 @@ from game import OmokGame
 
 def main():
     """메인 함수"""
-    print("🎮 3D 오목 게임을 시작합니다!")
-    print("게임 규칙:")
-    print("- 흑돌(검은색)과 백돌(흰색)을 번갈아가며 놓습니다")
-    print("- 가로, 세로, 대각선으로 5개 돌을 연속으로 놓으면 승리합니다")
-    print("- ESC 키를 누르면 게임을 종료합니다")
-    print("- R 키를 누르면 게임을 재시작합니다")
-    print("- 1 키를 누르면 2인용 모드로 전환합니다")
-    print("- 2 키를 누르면 AI 대전 모드로 전환합니다")
+    print("🎮 3D Omok Game Starting!")
+    print("Game Rules:")
+    print("- Place black and white stones alternately")
+    print("- Win by placing 5 stones in a row (horizontal, vertical, or diagonal)")
+    print("- Press ESC to exit the game")
+    print("- Press R to restart the game")
+    print("- Press 1 to switch to 2-Player mode")
+    print("- Press 2 to switch to AI mode")
     print()
     
     # Pygame 초기화

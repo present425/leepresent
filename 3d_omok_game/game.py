@@ -54,10 +54,39 @@ class OmokGame:
         self.GOLD = (255, 215, 0)
         self.SILVER = (192, 192, 192)
         
-        # 폰트 설정
-        self.font = pygame.font.Font(None, 36)
-        self.small_font = pygame.font.Font(None, 24)
-        self.large_font = pygame.font.Font(None, 48)
+        # 폰트 설정 (한글 지원)
+        try:
+            # macOS 기본 한글 폰트들 시도
+            font_names = [
+                'AppleGothic',
+                'Arial Unicode MS', 
+                'Helvetica',
+                'Arial',
+                'DejaVu Sans'
+            ]
+            
+            font_found = False
+            for font_name in font_names:
+                try:
+                    self.font = pygame.font.SysFont(font_name, 36)
+                    self.small_font = pygame.font.SysFont(font_name, 24)
+                    self.large_font = pygame.font.SysFont(font_name, 48)
+                    font_found = True
+                    break
+                except:
+                    continue
+            
+            if not font_found:
+                # 기본 폰트 사용
+                self.font = pygame.font.Font(None, 36)
+                self.small_font = pygame.font.Font(None, 24)
+                self.large_font = pygame.font.Font(None, 48)
+                
+        except:
+            # 폰트 로드 실패시 기본 폰트 사용
+            self.font = pygame.font.Font(None, 36)
+            self.small_font = pygame.font.Font(None, 24)
+            self.large_font = pygame.font.Font(None, 48)
         
         # 게임 상태
         self.board = Board(15, 15)  # 15x15 오목판
@@ -603,25 +632,25 @@ class OmokGame:
         self.screen.blit(ui_surface, (20, 20))
         
         # 게임 모드 표시
-        mode_text = "2인용 모드" if self.game_mode == "2p" else f"AI 대전 모드 ({self.ai_difficulty})"
+        mode_text = "2-Player Mode" if self.game_mode == "2p" else f"AI Mode ({self.ai_difficulty})"
         mode_surface = self.font.render(mode_text, True, self.WHITE)
         self.screen.blit(mode_surface, (30, 30))
         
         # 현재 플레이어 표시
-        player_text = "흑돌 차례" if self.current_player == 1 else "백돌 차례"
+        player_text = "Black Turn" if self.current_player == 1 else "White Turn"
         player_color = self.STONE_BLACK_HIGHLIGHT if self.current_player == 1 else self.STONE_WHITE_HIGHLIGHT
         player_surface = self.font.render(player_text, True, player_color)
         self.screen.blit(player_surface, (30, 70))
         
         # 조작법 안내
         controls = [
-            "ESC: 종료",
-            "R: 재시작", 
-            "1: 2인용 모드",
-            "2: AI 대전 모드",
-            "E: AI 쉬움",
-            "M: AI 보통",
-            "H: AI 어려움"
+            "ESC: Exit",
+            "R: Restart", 
+            "1: 2-Player Mode",
+            "2: AI Mode",
+            "E: AI Easy",
+            "M: AI Medium",
+            "H: AI Hard"
         ]
         
         for i, control in enumerate(controls):
@@ -633,13 +662,13 @@ class OmokGame:
         if self.game_over:
             # 배경 (그림자 효과)
             if self.winner:
-                winner_text = "흑돌 승리!" if self.winner == 1 else "백돌 승리!"
+                winner_text = "Black Wins!" if self.winner == 1 else "White Wins!"
                 status_surface = self.large_font.render(winner_text, True, self.RED)
             else:
-                status_surface = self.large_font.render("무승부!", True, self.BLUE)
+                status_surface = self.large_font.render("Draw!", True, self.BLUE)
             
             # 그림자
-            shadow_surface = self.large_font.render(winner_text if self.winner else "무승부!", True, self.DARK_GRAY)
+            shadow_surface = self.large_font.render(winner_text if self.winner else "Draw!", True, self.DARK_GRAY)
             shadow_rect = shadow_surface.get_rect()
             shadow_rect.center = (self.WIDTH // 2 + 3, 53)
             self.screen.blit(shadow_surface, shadow_rect)
@@ -650,7 +679,7 @@ class OmokGame:
             self.screen.blit(status_surface, text_rect)
             
             # 재시작 안내
-            restart_surface = self.small_font.render("R 키를 눌러 재시작하세요", True, self.WHITE)
+            restart_surface = self.small_font.render("Press R to restart", True, self.WHITE)
             restart_rect = restart_surface.get_rect()
             restart_rect.center = (self.WIDTH // 2, 90)
             self.screen.blit(restart_surface, restart_rect) 
